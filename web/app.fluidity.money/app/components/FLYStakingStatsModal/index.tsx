@@ -247,9 +247,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                             <Hoverable
                               tooltipStyle={"solid"}
                               tooltipContent={
-                                <div className="flex-column">
-                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam non ligula eu lectus facilisis sollicitudin.
-                                </div>
+                                <div className="flex-column">Learn more at the Fluidity Staking blog post.</div>
                               }
                             >
                               <div className="text-with-info-popup">

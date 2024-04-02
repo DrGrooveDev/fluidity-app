@@ -133,7 +133,7 @@ contract StakingV1 is IStaking, IERC20, IEmergencyMode, IOperatorOwned {
     /* ~~~~~~~~~~ INTERNAL FUNCTIONS ~~~~~~~~~~ */
 
     function _calcDay1Points(uint256 _flyAmount) internal pure returns (uint256 points) {
-        return (_flyAmount * 4 * 7 days) / 1e6;
+        return (_flyAmount * 4 * 7 days * 3) / 1e6;
     }
 
     function calculatePoints(uint256 curTimestamp, StakedPrivate memory _staked) public pure returns (uint256 points) {
