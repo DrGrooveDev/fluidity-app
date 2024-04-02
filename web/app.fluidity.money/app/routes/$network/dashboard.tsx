@@ -32,6 +32,7 @@ import {
   Trophy,
   AssetsIcon,
   FlyIcon,
+  StakeIcon,
   Text,
   Heading,
   ChainSelectorButton,
@@ -58,6 +59,7 @@ import { getProviderDisplayName } from "~/util/provider";
 import dashboardStyles from "~/styles/dashboard.css";
 import referralModalStyles from "~/components/ReferralModal/referralModal.css";
 import { UIContext } from "contexts/UIProvider";
+import { FlyStakingStatsModal } from "~/components/FLYStakingStatsModal";
 
 export const links: LinksFunction = () => {
   return [
@@ -419,6 +421,8 @@ export default function Dashboard() {
   const [hoverModal, setHoverModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const [stakingStatsModalVisibility, setStakingStatsModalVisibility] = useState(false);
+
   const otherModalOpen =
     openMobModal ||
     walletModalVisibility ||
@@ -570,6 +574,12 @@ export default function Dashboard() {
               </li>
             );
           })}
+          <li key="staking">
+            <div />
+            <a style={{ "cursor": "pointer" }} onClick={() => setStakingStatsModalVisibility(true)}>
+              <Text className="dashboard-navbar-default"><StakeIcon classname="staking-icon" /> STAKING</Text>
+            </a>
+          </li>
         </ul>
 
         {/* Connect Wallet Button */}
@@ -733,6 +743,12 @@ export default function Dashboard() {
           visible={walletModalVisibility}
           close={() => setWalletModalVisibility(false)}
         />
+        <FlyStakingStatsModal
+          staking={true}
+          close={() => { setStakingStatsModalVisibility(false) }}
+          showConnectWalletModal={() => setWalletModalVisibility(true)}
+          visible={stakingStatsModalVisibility}
+        />
         <UIContext.Provider
           value={{
             toggleConnectWalletModal: () => setWalletModalVisibility((v) => !v),
@@ -870,6 +886,13 @@ export default function Dashboard() {
               const { name, icon, path } = Object.values(obj)[0];
               return { name, icon, path };
             })}
+            nonNavigationEntries={[
+              <li key="staking">
+                <div />
+                <a style={{ "cursor": "pointer" }} onClick={() => setStakingStatsModalVisibility(true)}>
+                  <Text className="dashboard-navbar-default"><StakeIcon classname="staking-icon" /> STAKING</Text>
+                </a>
+              </li>]}
             activeIndex={activeIndex}
             chains={chainNameMap}
             unclaimedFluid={userUnclaimedRewards}

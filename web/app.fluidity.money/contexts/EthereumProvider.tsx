@@ -28,6 +28,16 @@ import {
   testMakeStakingDeposit,
   makeStakingRedemption,
 } from "~/util/chainUtils/ethereum/transaction";
+import {
+  merkleDistributorWithDeadlineClaim as doMerkleDistributorWithDeadlineClaim,
+  merkleDistributorWithDeadlineClaimAndStake as doMerkleDistributorWithDeadlineClaimAndStake,
+  flyStakingStake as doFlyStakingStake,
+  flyStakingBeginUnstake as doFlyStakingBeginUnstake,
+  flyStakingDetails as doFlyStakingDetails,
+  flyStakingAmountUnstaking as doFlyStakingAmountUnstaking,
+  flyStakingFinaliseUnstake as doFlyStakingFinaliseUnstake,
+  flyStakingSecondsUntilSoonestUnstake as doFlyStakingSecondsUntilSoonestUnstake,
+} from "~/util/chainUtils/ethereum/transaction";
 import makeContractSwap, {
   ContractToken,
   getBalanceOfERC20,
@@ -40,10 +50,20 @@ import {
   getNetworkFromChainId,
 } from "~/util/chainUtils/chains";
 
+import TokenAbi from "~/util/chainUtils/ethereum/Token.json";
 import StakingAbi from "~/util/chainUtils/ethereum/Staking.json";
 import LootboxOwnershipAbi from "~/util/chainUtils/ethereum/LootboxConfirmAddressOwnership.json";
+import MerkleDistributorWithDeadlineAbi from "~/util/chainUtils/ethereum/MerkleDistributorWithDeadline.json";
+import FlyStakingAbi from "~/util/chainUtils/ethereum/FLYStaking.json";
+
 import { useToolTip } from "~/components";
 import { NetworkTooltip } from "~/components/ToolTip";
+
+const FlyTokenAddr = "0x000F1720A263f96532D1ac2bb9CDC12b72C6f386";
+
+const FlyStakingAddr = "0x9E8892E443AD6472e4D9362DF6D0C238000028a3";
+
+const MerkleDistributorWithDeadlineAddr = "0xa86fe32da288f169c2ee449b585dcb0317b631e1";
 
 type OKXWallet = {
   isOkxWallet: boolean;
@@ -54,6 +74,18 @@ type Coin98Wallet = {
 } & Provider;
 
 type MetamaskError = { code: number; message: string };
+
+// FLY is a special case that shouldn't be defined in the normal tokens list
+export const FlyToken = {
+  symbol: "FLY",
+  logo: "https://static.fluidity.money/images/fly.svg",
+  address: "0x000F1720A263f96532D1ac2bb9CDC12b72C6f386",
+  decimals: 6,
+  // mock these fields as we don't need them to add the token to wallet or fetch its balance
+  colour: "",
+  enabled: true,
+  name: ""
+} satisfies Token
 
 const EthereumFacade = ({
   children,
@@ -261,9 +293,9 @@ const EthereumFacade = ({
 
     return ethContractRes
       ? {
-          confirmTx: async () => (await ethContractRes.wait())?.status === 1,
-          txHash: ethContractRes.hash,
-        }
+        confirmTx: async () => (await ethContractRes.wait())?.status === 1,
+        txHash: ethContractRes.hash,
+      }
       : undefined;
   };
 
@@ -289,7 +321,9 @@ const EthereumFacade = ({
    * Will fail on non-Metamask compliant wallets.
    */
   const addToken = async (symbol: string) => {
-    const token = tokens.find((t) => t.symbol === symbol);
+    const token = symbol === "FLY" ?
+      FlyToken :
+      tokens.find((t) => t.symbol === symbol);
 
     if (!token) return;
 
@@ -329,11 +363,11 @@ const EthereumFacade = ({
     address: string
   ): Promise<
     | Array<{
-        fluidAmount: BN;
-        baseAmount: BN;
-        durationDays: number;
-        depositDate: Date;
-      }>
+      fluidAmount: BN;
+      baseAmount: BN;
+      durationDays: number;
+      depositDate: Date;
+    }>
     | undefined
   > => {
     const signer = provider?.getSigner();
@@ -480,9 +514,9 @@ const EthereumFacade = ({
 
     return stakingDepositRes
       ? {
-          confirmTx: async () => (await stakingDepositRes.wait())?.status === 1,
-          txHash: stakingDepositRes.hash,
-        }
+        confirmTx: async () => (await stakingDepositRes.wait())?.status === 1,
+        txHash: stakingDepositRes.hash,
+      }
       : undefined;
   };
 
@@ -523,9 +557,9 @@ const EthereumFacade = ({
 
     return stakingRedeemRes
       ? {
-          confirmTx: async () => (await stakingRedeemRes.wait())?.status === 1,
-          txHash: stakingRedeemRes.hash,
-        }
+        confirmTx: async () => (await stakingRedeemRes.wait())?.status === 1,
+        txHash: stakingRedeemRes.hash,
+      }
       : undefined;
   };
 
@@ -569,6 +603,169 @@ const EthereumFacade = ({
     console.log(result);
   };
 
+  const merkleDistributorWithDeadlineEndTime = () => {
+    throw new Error("TODO");
+  };
+
+  const merkleDistributorWithDeadlineClaim = async (
+    address: string,
+    index: number,
+    amount: BN,
+    merkleProof: string[]
+  ) => {
+    const signer = provider?.getSigner();
+
+    if (!signer) {
+      return undefined;
+    }
+
+    const result = await doMerkleDistributorWithDeadlineClaim(
+      signer,
+      MerkleDistributorWithDeadlineAddr,
+      MerkleDistributorWithDeadlineAbi,
+      index,
+      amount,
+      merkleProof
+    );
+    console.log(result);
+
+    return true;
+  };
+
+  const merkleDistributorWithDeadlineClaimAndStake = async (
+    address: string,
+    index: number,
+    amount: BN,
+    merkleProof: string[]
+  ) => {
+    const signer = provider?.getSigner();
+
+    if (!signer) {
+      return undefined;
+    }
+
+    const result = await doMerkleDistributorWithDeadlineClaimAndStake(
+      signer,
+      MerkleDistributorWithDeadlineAddr,
+      MerkleDistributorWithDeadlineAbi,
+      index,
+      amount,
+      merkleProof
+    );
+    console.log(result);
+  };
+
+  const flyStakingStake = async (amount: BN) => {
+    const signer = provider?.getSigner();
+
+    if (!signer) {
+      return undefined;
+    }
+
+    const result = await doFlyStakingStake(
+      signer,
+      FlyTokenAddr,
+      TokenAbi,
+      FlyStakingAddr,
+      FlyStakingAbi,
+      amount,
+    );
+    console.log(result);
+
+    return new BN(result.toString());
+  };
+
+  const flyStakingDetails = async (address: string) => {
+    if (!provider) return undefined;
+
+    const result = await doFlyStakingDetails(
+      provider,
+      FlyStakingAddr,
+      FlyStakingAbi,
+      address
+    );
+    console.log(result);
+
+    return result;
+  };
+
+  const flyStakingSecondsUntilSoonestUnstake = async (address: string) => {
+    if (!provider) return undefined;
+
+    const result = await doFlyStakingSecondsUntilSoonestUnstake(
+      provider,
+      FlyStakingAddr,
+      FlyStakingAbi,
+      address
+    );
+    console.log(result);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return new BN(result.toString());
+  };
+
+  const flyStakingBeginUnstake = async (amount: BN) => {
+    const signer = provider?.getSigner();
+
+    if (!signer) {
+      return undefined;
+    }
+
+    const result = await doFlyStakingBeginUnstake(
+      signer,
+      FlyStakingAddr,
+      FlyStakingAbi,
+      amount
+    );
+    console.log(result);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return result;
+  };
+
+  const flyStakingFinaliseUnstake = async () => {
+    const signer = provider?.getSigner();
+
+    if (!signer) {
+      return undefined;
+    }
+
+    const result = await doFlyStakingFinaliseUnstake(
+      signer,
+      FlyStakingAddr,
+      FlyStakingAbi
+    );
+    console.log(result);
+
+    if (!result) {
+      return undefined;
+    }
+
+    return new BN(result.toString());
+  };
+
+  const flyStakingAmountUnstaking = async (address: string) => {
+    if (!provider) return undefined;
+
+    const result = await doFlyStakingAmountUnstaking(
+      provider,
+      FlyStakingAddr,
+      FlyStakingAbi,
+      address
+    );
+    console.log(result);
+
+    if (!result) return;
+
+    return new BN(result.toString());
+  };
+
   return (
     <FluidityFacadeContext.Provider
       value={{
@@ -594,6 +791,15 @@ const EthereumFacade = ({
         getStakingRatios,
         signOwnerAddress,
         confirmAccountOwnership,
+        merkleDistributorWithDeadlineEndTime,
+        merkleDistributorWithDeadlineClaim,
+        merkleDistributorWithDeadlineClaimAndStake,
+        flyStakingStake,
+        flyStakingDetails,
+        flyStakingBeginUnstake,
+        flyStakingSecondsUntilSoonestUnstake,
+        flyStakingFinaliseUnstake,
+        flyStakingAmountUnstaking,
       }}
     >
       {children}

@@ -1131,6 +1131,10 @@ $holo: linear-gradient(
 .recap-you-are-eligible-ethereum-address-delegate-solana {
 }
 
+.legal {
+  margin-top: 1em;
+}
+
 .recap-fly-count-thank-you {
   text-align: center;
   max-width: 700px;
@@ -1165,6 +1169,15 @@ $holo: linear-gradient(
   color: white;
 }
 
+.recap-terms-of-condition-claim-or-stake {
+  all: unset;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  color: white;
+  text-align: center;
+}
+
 .recap-fly-count-delegate-button-success {
   border-color: green;
 }
@@ -1177,6 +1190,7 @@ $holo: linear-gradient(
   justify-content: center;
   flex-direction: row;
   width: 100%;
+  height: 100%;
   padding-top: 40px;
   background-color: rgba(0, 0, 0, 0.75);
 }
@@ -1211,4 +1225,350 @@ $holo: linear-gradient(
 
 .recap-you-are-eligible-claim-at-tge-button-container:hover span {
   color: black;
+}
+
+.fly-submit-claim-modal-background {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+}
+
+.fly-submit-claim-modal-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: #131313;
+    padding: 3em;
+    border: solid white 2px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 546px;
+    min-height: 495px;
+    margin: auto;
+}
+
+.fly-staking-stats-modal-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    background-color: #131313;
+    padding: 3em;
+    border: solid white 2px;
+    border-radius: 8px;
+    min-width: 300px;
+    max-width: 575px;
+    min-height: 495px;
+    margin: auto;
+}
+
+.fly-submit-claim-flex-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.fly-confirming-claim-button-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.fly-submit-claim-modal-button-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+    border-width: 2px;
+    border-color: white;
+    gap: 1em;
+    // position: absolute;
+}
+
+.fly-submit-claim-modal-options {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.fly-submit-claim-modal-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4em;
+    padding: 1.5em;
+}
+
+.fly-confirming-claim-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.fly-points-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.staking-card {
+  background-color: #FFD362 !important;
+  gap: 1em;
+}
+
+.staking-card-container {
+  display: flex;
+  align-items: end;
+  gap: 0.5em;
+}
+
+.fly-confirming-claim-header {
+  display: flex;
+  flex-direction: row;
+  // gap: 1em;
+  align-items: flex-end;
+}
+
+.fly-submit-claim-heading-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1em;
+}
+
+.fly-submit-claim-heading {
+  font-weight: normal !important;
+  margin: 0;
+}
+
+.fly-caution-text {
+  color: #FFB300;
+}
+
+.fly-caution-border {
+  border-left: 4px #FFB300 solid;
+  margin-left: 1em;
+  padding-left: 1em;
+}
+
+.fly-caution-centre-text {
+  align-self: center;
+  margin-bottom: 2em;
+}
+
+.fly-submit-claim-action-button {
+  width: unset !important;
+  align-self: normal !important;
+}
+
+.fly-staking-stats-action-button {
+  width: 100% !important;
+  align-self: normal !important;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.fly-submit-claim-action-button-text {
+  color: inherit !important;
+  display: flex !important;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.fly-continue-claiming-text {
+  color: inherit !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.stake-your-fly-text {
+  color: inherit !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.fly-claim-stake-choice-button {
+  width: 100% !important;
+}
+
+.fly-once-approved {
+  margin-top: 1em;
+}
+
+.fly-submit-claim-circle {
+  // padding: 1em;
+}
+
+.fly-submit-claim-outer-modal-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+}
+
+.claim-button-staked {
+  border: solid lime 2px !important;
+  color: lime !important;
+  background-color: unset !important;
+}
+
+.show-fly-modal {
+  display: flex; 
+}
+
+.link {
+  text-decoration: underline;
+  color: white;
+  cursor: pointer;
+}
+
+.max-balance-text {
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.no-gap {
+  gap: 0;
+}
+
+.fly-staking-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.text-with-info-popup {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.staking-input {
+  width: 80%;
+  color: white;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  outline: none;
+}
+
+.staking-input-underline {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  border-bottom: 2px white solid;
+  margin-bottom: 1em;
+  padding-top: 1.5em;
+  padding-bottom: 1em;
+}
+
+.staking-input-lower {
+  justify-content: space-between;
+  display: flex;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.info-circle-grey > path {
+  fill: #828381;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.black {
+  color: black !important;
+}
+
+.rainbow {
+  position: relative;
+  overflow: hidden;
+  font-size: 15px;
+  box-shadow: 0 0 8px 2px #f3b8d8;
+}
+
+.rainbow::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  left: -20%;
+  top: -150%;
+  width: 400px;
+  height: 400px;
+  background-color: #f3b8d8;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-image: linear-gradient(
+    45deg,
+    #f3b8d8,
+    #b793e9,
+    #9fd4f3,
+    #ffd2c4,
+    #fbf3f3,
+    #d9abdf,
+    #af9ce3,
+    #aae4e1,
+    #c6ead0,
+    #ffffff,
+    #fdb5e4
+  );
+  animation: rotate 4s linear infinite;
+}
+
+.rainbow::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 3px;
+  top: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  background: black;
+  border-radius: inherit;
+}
+
+.rainbow:hover > h5 {
+  color: black;
+}
+
+.rainbow:hover:focus > h5 {
+  color: white;
+}
+
+.rainbow:hover:focus::after {
+  background: black;
+}
+
+.rainbow:hover::after {
+  background: transparent;
 }

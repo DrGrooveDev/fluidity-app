@@ -71,6 +71,7 @@ import Table, { IRow } from "~/components/Table";
 import { ReferralBottlesCountLoaderData } from "../../query/referralBottles";
 import { HowItWorksContent } from "~/components/ReferralModal";
 import JoeFarmlandsOrCamelotKingdom from "~/components/JoeFarmlandsOrCamelotKingdom";
+import { redirect } from "react-router-dom";
 
 const EPOCH_CURRENT_IDENTIFIER = "epoch_2";
 
@@ -112,15 +113,24 @@ export const loader: LoaderFunction = async ({ params }) => {
     allowedTokenSymbols.has(symbol)
   );
 
+  const redirectTarget = redirect("/");
+  const ethereumWallets = config.config["ethereum"].wallets;
+
+  if (!network || !Object.keys(config.drivers).includes(network)) {
+    return redirectTarget;
+  }
+
   return json({
     tokens: allowedTokens,
     network,
+    ethereumWallets
   } satisfies LoaderData);
 };
 
 type LoaderData = {
   tokens: Array<Token>;
   network: string;
+  ethereumWallets: typeof config.config["ethereum"]["wallets"],
 };
 
 const SAFE_DEFAULT_AIRDROP: AirdropLoaderData = {
@@ -306,7 +316,7 @@ const Airdrop = () => {
         <div className="recap-fly-count-block-solana">
           <div className="recap-fly-count-header-solana">
             <Text size="md" code={true}>
-              Congratulations! You are eligible to claim
+              Congratulations! You are eligible to claim 25% of your tokens at TGE
             </Text>
             <Heading>$FLY {numberToCommaSeparated(flyAmountOwed)}</Heading>
             <Text>
@@ -500,10 +510,8 @@ const Airdrop = () => {
   const currentApplication = "";
 
   const { data: airdropLeaderboardData } = useCache<AirdropLoaderData>(
-    `/${network}/query/dashboard/airdropLeaderboard?period=${
-      leaderboardFilterIndex === 0 ? "24" : "all"
-    }&address=${address ?? ""}${
-      leaderboardFilterIndex === 0 ? `&provider=${currentApplication}` : ""
+    `/${network}/query/dashboard/airdropLeaderboard?period=${leaderboardFilterIndex === 0 ? "24" : "all"
+    }&address=${address ?? ""}${leaderboardFilterIndex === 0 ? `&provider=${currentApplication}` : ""
     }&epoch=${EPOCH_CURRENT_IDENTIFIER}`
   );
 
@@ -782,9 +790,8 @@ const Airdrop = () => {
   const Header = () => {
     return (
       <div
-        className={`pad-main airdrop-header ${
-          isMobile ? "airdrop-mobile" : ""
-        }`}
+        className={`pad-main airdrop-header ${isMobile ? "airdrop-mobile" : ""
+          }`}
       >
         <TabButton
           size="small"
@@ -860,20 +867,19 @@ const Airdrop = () => {
       <>
         <Header />
         <motion.div
-          className={`pad-main ${
-            currentModal === "leaderboard" ? "airdrop-leaderboard-mobile" : ""
-          }`}
+          className={`pad-main ${currentModal === "leaderboard" ? "airdrop-leaderboard-mobile" : ""
+            }`}
           style={{
             display: "flex",
             flexDirection: "column",
             gap:
               currentModal === "tutorial" ||
-              currentModal === "leaderboard" ||
-              currentModal === "stake"
+                currentModal === "leaderboard" ||
+                currentModal === "stake"
                 ? "0.5em"
                 : currentModal === "referrals"
-                ? "1em"
-                : "2em",
+                  ? "1em"
+                  : "2em",
           }}
           key={`airdrop-mobile-${currentModal}`}
         >
@@ -1424,8 +1430,8 @@ const AirdropStats = ({
           handleClick={
             isMobile
               ? () => {
-                  navigate(`/${network}/dashboard/rewards`);
-                }
+                navigate(`/${network}/dashboard/rewards`);
+              }
               : seeBottlesDetails
           }
           style={{
@@ -1599,9 +1605,8 @@ const airdropRankRow = (
   const { user, rank, referralCount, fusdcEarned, arbEarned, bottles } = data;
 
   return {
-    className: `airdrop-row ${isMobile ? "airdrop-mobile" : ""} ${
-      address === user ? "highlighted-row" : ""
-    }`,
+    className: `airdrop-row ${isMobile ? "airdrop-mobile" : ""} ${address === user ? "highlighted-row" : ""
+      }`,
     RowElement: ({ heading }: { heading: string }) => {
       switch (heading) {
         case "RANK":
@@ -1612,8 +1617,8 @@ const airdropRankRow = (
                 style={
                   address === user
                     ? {
-                        color: "black",
-                      }
+                      color: "black",
+                    }
                     : {}
                 }
               >
@@ -1635,8 +1640,8 @@ const airdropRankRow = (
                   style={
                     address === user
                       ? {
-                          color: "black",
-                        }
+                        color: "black",
+                      }
                       : {}
                   }
                 >
@@ -1653,8 +1658,8 @@ const airdropRankRow = (
                 style={
                   address === user
                     ? {
-                        color: "black",
-                      }
+                      color: "black",
+                    }
                     : {}
                 }
               >
@@ -1670,8 +1675,8 @@ const airdropRankRow = (
                 style={
                   address === user
                     ? {
-                        color: "black",
-                      }
+                      color: "black",
+                    }
                     : {}
                 }
               >
@@ -1687,8 +1692,8 @@ const airdropRankRow = (
                 style={
                   address === user
                     ? {
-                        color: "black",
-                      }
+                      color: "black",
+                    }
                     : {}
                 }
               >
@@ -1704,8 +1709,8 @@ const airdropRankRow = (
                 style={
                   address === user
                     ? {
-                        color: "black",
-                      }
+                      color: "black",
+                    }
                     : {}
                 }
               >
