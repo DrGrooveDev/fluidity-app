@@ -240,7 +240,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                   <div className="fly-submit-claim-modal-options">
                     {currentStatus === State.Stats ?
                       <>
-                        <div className="flex-column no-gap fly-submit-claim-modal-row">
+                        <div className="flex-column no-gap fly-staking-stats-modal-row">
                           <Text size="xxxl" holo>{points.toString()}</Text>
                           <div className="text-with-info-popup">
                             <Hoverable
@@ -256,14 +256,14 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                             </Hoverable>
                           </div>
                         </div>
-                        <div className="fly-submit-claim-modal-row">
+                        <div className="fly-staking-stats-modal-row">
                           <Card border="solid" fill>
                             <Text className="center-text" size="lg" prominent>
                               💸 Stake your $FLY to earn Airdrop Rewards and [REDACTED] in Superposition (SPN) 🐱
                             </Text>
                           </Card>
                         </div>
-                        <div style={{ gap: '0.5em' }} className="fly-submit-claim-modal-row">
+                        <div style={{ gap: '0.5em' }} className="fly-staking-stats-modal-row">
                           <Card fill>
                             <Hoverable
                               tooltipStyle={"solid"}
@@ -327,7 +327,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                       currentStatus === State.StakingDetails ?
                         <div className="fly-submit-claim-modal-options">
                           {isStaking ?
-                            <div className="fly-submit-claim-modal-row">
+                            <div className="fly-staking-stats-modal-row">
                               <StakingWarning
                                 header={
                                   <Text size="lg" bold prominent className="black">Staking will lock up your funds for <span className="underline">7 Days</span>.</Text>
@@ -339,7 +339,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                             </div>
                             :
                             <>
-                              <div className="fly-submit-claim-modal-row">
+                              <div className="fly-staking-stats-modal-row">
                                 <StakingWarning
                                   header={
                                     <Text size="lg" bold prominent className="black">Access to the tokens will be <span className="underline">granted in 7 Days</span>.</Text>
@@ -349,7 +349,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
 
                                   } />
                               </div>
-                              <div className="fly-submit-claim-modal-row">
+                              <div className="fly-staking-stats-modal-row">
                                 <StakingWarning
                                   header={
                                     <Text size="lg" bold prominent className="black">Unstaking will result in the loss of some points.</Text>
@@ -361,7 +361,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                               </div>
                             </>
                           }
-                          <div className="fly-submit-claim-modal-row">
+                          <div className="fly-staking-stats-modal-row">
                             <div className="fly-staking-input-container">
                               <Text prominent size="lg">AMOUNT OF $FLY TO STAKE</Text>
                               <div className="staking-input-underline">
@@ -397,7 +397,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
 
 
                         <div className="fly-submit-claim-modal-options">
-                          {currentStatus <= State.IsConnected && <div className="fly-submit-claim-modal-row">
+                          {currentStatus <= State.IsConnected && <div className="fly-staking-stats-modal-row">
                             <div className="fly-points-info-container">
                               <div className="flex">
                                 <Text size="lg" prominent>🏄🏼‍♂️</Text>
@@ -411,7 +411,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                             </div>
                           </div>
                           }
-                          <div className="fly-submit-claim-modal-row">
+                          <div className="fly-staking-stats-modal-row">
                             {currentStatus <= State.AmountEntered
                               ? <NextCircle /> : <Checked />}
                             <div className="flex-column">
@@ -419,7 +419,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                               {State.IsConnected && address && <Text size="md" >Connected {trimAddress(address)}</Text>}
                             </div>
                           </div>
-                          <div className="fly-submit-claim-modal-row">
+                          <div className="fly-staking-stats-modal-row">
                             {currentStatus < State.HasStaked ? <BaseCircle /> : <Checked />}
                             <div className="flex-column">
                               <Text size="lg" prominent>{isStaking ? "Stake" : "Unstake"} $FLY {getUsdFromTokenAmount(stakeAmount, FlyToken)}</Text>
