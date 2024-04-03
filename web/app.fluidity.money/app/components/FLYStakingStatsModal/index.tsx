@@ -16,7 +16,8 @@ interface FlyStakingStatsModalProps {
   showConnectWalletModal: () => void;
   close: () => void;
   // true for staking, false for unstaking
-  staking?: boolean
+  staking?: boolean;
+  shouldUpdateFlyBalance: number;
 }
 
 enum State {
@@ -48,10 +49,8 @@ const getValueFromFlyAmount = (amount: BN) => {
   }
 };
 
-const getValueFromFlyAmountEthers = (amount: BigNumber) =>
-  getValueFromFlyAmount(new BN(amount.toString()));
+const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUpdateFlyBalance, staking = true }: FlyStakingStatsModalProps) => {
 
-const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking = true }: FlyStakingStatsModalProps) => {
   const [modal, setModal] = useState<React.ReactPortal | null>(null);
 
   const {
@@ -93,7 +92,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
         setCurrentStatus(State.InError);
       }
     })();
-  }, [balance]);
+  }, [balance, shouldUpdateFlyBalance]);
 
   const [points, setPoints] = useState(BigNumber.from(0));
   const [flyStaked, setFlyStaked] = useState(BigNumber.from(0));
@@ -104,17 +103,21 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
         if (!address) return;
         if (!flyStakingDetails) return;
         const details = await flyStakingDetails(address);
-        if (!details) throw new Error("couldnt get fly details"); // hope we get an error instead here
+        if (!details) {
+          console.error("couldnt get fly staking details");
+          return;
+        }
         const { flyStaked, points } = details;
         setPoints(points);
         setFlyStaked(flyStaked);
+        console.log("fly staked 123", flyStaked);
       } catch (err) {
         console.error("error staking details", err);
         setErrorMessage(`Failed to get staking details! ${err}`);
         setCurrentStatus(State.InError);
       }
     })();
-  }, [address, flyStakingDetails]);
+  }, [address, flyStakingDetails, shouldUpdateFlyBalance]);
 
   const [flyUnstaking, setFlyUnstaking] = useState(new BN(0));
 
@@ -373,7 +376,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, staking 
                               }
                             >
                               <div className="flex-column">
-                                <Text size="lg" prominent>{getValueFromFlyAmountEthers(flyStaked)?.toString()}</Text>
+                                <Text size="lg" prominent>{flyStaked.toString()}</Text>
                                 <div className="text-with-info-popup">
                                   <Text size="lg">Staked</Text>
                                   <InfoCircle className="info-circle-grey" />
