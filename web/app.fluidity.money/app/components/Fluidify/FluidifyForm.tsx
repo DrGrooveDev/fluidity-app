@@ -9,6 +9,7 @@ import {
   addDecimalToBn,
   getUsdFromTokenAmount,
   snapToValidValue,
+  parseSwapInputToTokenAmount,
 } from "~/util/chainUtils/tokens";
 
 interface IFluidifyFormProps {
@@ -32,7 +33,7 @@ export const FluidifyForm = ({
 
   const [swapInput, setSwapInput] = useState<string>("");
 
-  const swapAmount: BN = snapToValidValue(swapInput, assetToken, assetToken.userTokenBalance, assetToken.userMintedAmt);
+  const swapAmount: BN = snapToValidValue(swapInput, assetToken, assetToken.userTokenBalance);
 
   const assertCanSwap =
     connected &&
@@ -72,7 +73,6 @@ export const FluidifyForm = ({
           assetToken.userTokenBalance.toString(),
           assetToken,
           assetToken.userTokenBalance,
-          assetToken.userMintedAmt,
         ),
         assetToken.decimals
       )
@@ -122,12 +122,7 @@ export const FluidifyForm = ({
           onBlur={(e) =>
             setSwapInput(
               addDecimalToBn(
-                snapToValidValue(
-                  e.target.value,
-                  assetToken,
-                  assetToken.userTokenBalance,
-                  assetToken.userMintedAmt,
-                ),
+                parseSwapInputToTokenAmount(e.target.value, assetToken),
                 assetToken.decimals
               )
             )
