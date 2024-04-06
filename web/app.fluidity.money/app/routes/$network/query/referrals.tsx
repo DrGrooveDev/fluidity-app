@@ -11,6 +11,7 @@ import {
 } from "~/queries";
 import { jsonPost } from "~/util";
 import { AddReferralCodeBody, AddReferralCodeData } from "./referralCode";
+import { EPOCH_CURRENT_IDENTIFIER } from "../dashboard/airdrop";
 
 export type ReferralCountLoaderData = {
   numActiveReferrerReferrals: number;
@@ -50,15 +51,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     { data: inactiveReferralData, errors: inactiveReferralErr },
     { data: referralCodeData, errors: referralCodeErr },
   ] = await Promise.all([
-    useActiveReferralCountByReferrerAddress(address),
-    useActiveReferralCountByRefereeAddress(address),
-    useInactiveReferralCountByRefereeAddress(address),
-    useInactiveReferralByAddress(address),
-    useReferralCodeByAddress(address),
+    useActiveReferralCountByReferrerAddress(address, EPOCH_CURRENT_IDENTIFIER),
+    useActiveReferralCountByRefereeAddress(address, EPOCH_CURRENT_IDENTIFIER),
+    useInactiveReferralCountByRefereeAddress(address, EPOCH_CURRENT_IDENTIFIER),
+    useInactiveReferralByAddress(address, EPOCH_CURRENT_IDENTIFIER),
+    useReferralCodeByAddress(address, EPOCH_CURRENT_IDENTIFIER),
   ]);
 
   if (activeReferrerReferralCountErr || !activeReferrerReferralCountData) {
-    throw new Error("Could not fetch Referrals");
+    throw new Error(`Could not fetch Referrals referrer count ${JSON.stringify(activeReferrerReferralCountErr)}`);
   }
 
   const {
@@ -68,7 +69,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   } = activeReferrerReferralCountData;
 
   if (activeRefereeReferralCountErr || !activeRefereeReferralCountData) {
-    throw new Error("Could not fetch Referrals");
+    throw new Error(`Could not fetch Referrals referee active count ${JSON.stringify(activeRefereeReferralCountErr)}`);
   }
 
   const {
@@ -88,7 +89,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   } = inactiveRefereeReferralCountData;
 
   if (inactiveReferralErr || !inactiveReferralData) {
-    throw new Error("Could not fetch Referrals");
+    throw new Error(`Could not fetch Referrals inactive count ${JSON.stringify(inactiveReferralErr)}`);
   }
 
   const { lootbox_referrals: inactiveReferrals } = inactiveReferralData;

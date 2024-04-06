@@ -1069,7 +1069,6 @@ $holo: linear-gradient(
 }
 
 .airdrop-arb-multipliers-container {
-  display: flex;
   padding-top: 20px;
 }
 
@@ -1633,4 +1632,9 @@ claim-error-message-none {
 .staking-stats-info-text {
   min-width: 100px;
   max-width: 140px;
+}
+
+.airdrop-image-banner {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }

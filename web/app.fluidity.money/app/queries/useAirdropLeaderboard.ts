@@ -33,6 +33,7 @@ const queryAllTime = gql`
       liquidityMultiplier: liquidity_multiplier
       fusdcEarned: fusdc_earned
       arbEarned: arb_earned
+      flyStaked: fly_staked
     }
   }
 `;
@@ -53,6 +54,7 @@ const queryByUser24Hours = gql`
       liquidityMultiplier: liquidity_multiplier
       fusdcEarned: fusdc_earned
       arbEarned: arb_earned
+      flyStaked: fly_staked
     }
   }
 `;
@@ -72,6 +74,7 @@ const query24Hours = gql`
       liquidityMultiplier: liquidity_multiplier
       fusdcEarned: fusdc_earned
       arbEarned: arb_earned
+      flyStaked: fly_staked
     }
   }
 `;
@@ -95,6 +98,7 @@ const query24HoursByUserByApplication = gql`
       liquidityMultiplier: liquidity_multiplier
       fusdcEarned: fusdc_earned
       arbEarned: arb_earned
+      flyStaked: fly_staked
     }
   }
 `;
@@ -117,6 +121,7 @@ const query24HoursByApplication = gql`
       liquidityMultiplier: liquidity_multiplier
       fusdcEarned: fusdc_earned
       arbEarned: arb_earned
+      flyStaked: fly_staked
     }
   }
 `;
@@ -153,6 +158,7 @@ export type AirdropLeaderboardEntry = {
   liquidityMultiplier: number;
   fusdcEarned: number;
   arbEarned: number;
+  flyStaked: number;
 };
 
 type AirdropLeaderboardResponse = {

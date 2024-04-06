@@ -5,7 +5,7 @@ const QUERY_BY_TX_HASH = gql`
   query getLootboxesByTxHash($filterHashes: [String!] = []) {
     lootbox(where: { transaction_hash: { _in: $filterHashes } }) {
       txHash: transaction_hash
-      lootboxCount: new_count
+      lootboxCount: lootbox_count
       rewardTier: reward_tier
     }
   }

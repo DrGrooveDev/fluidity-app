@@ -66,6 +66,7 @@ import { useFLYOwedForAddress } from "~/queries";
 import config from "~/webapp.config.server";
 import AugmentedToken from "~/types/AugmentedToken";
 import FluidityFacadeContext from "contexts/FluidityFacade";
+import { FlyStakingContext } from "contexts/FlyStakingProvider";
 import { useCache } from "~/hooks/useCache";
 import Table, { IRow } from "~/components/Table";
 import { ReferralBottlesCountLoaderData } from "../../query/referralBottles";
@@ -73,7 +74,7 @@ import { HowItWorksContent } from "~/components/ReferralModal";
 import JoeFarmlandsOrCamelotKingdom from "~/components/JoeFarmlandsOrCamelotKingdom";
 import { redirect } from "react-router-dom";
 
-const EPOCH_CURRENT_IDENTIFIER = "epoch_2";
+export const EPOCH_CURRENT_IDENTIFIER = "epoch_3";
 
 const AIRDROP_BLOG_POST =
   "https://blog.fluidity.money/announcing-the-fluidity-airdrop-and-ico-4c72172acb64";
@@ -203,6 +204,8 @@ const Airdrop = () => {
     getStakingDeposits,
     redeemTokens,
   } = useContext(FluidityFacadeContext);
+
+  const { toggleVisibility: toggleStakingVisibility } = useContext(FlyStakingContext);
 
   if (network !== "arbitrum") {
     // assuming this is solana
@@ -891,14 +894,14 @@ const Airdrop = () => {
                   style={{ marginBottom: "0.5em" }}
                   className={"no-margin"}
                 >
-                  Airdrop V2: Arbitrum&apos;s Space Expedition.
+                  Airdrop V3: FLY Me To The Moon.
                 </Heading>
                 <Text>
-                  Fluidify your assets, transact them, and boost your rewards by
-                  using your Fluid Assets on partnered protocols and staking
-                  liquidity right here on Fluidity! Keep an eye on the
-                  leaderboard as you compete with fellow Fluiders for the top
-                  spot. Future Fluid Governance Tokens await!
+                  Stake and trade your $FLY, fluidify your assets, transact them, and boost your rewards by
+                  using trading on partnered protocols and staking liquidity right here on Fluidity! Keep an
+                  eye on the leaderboard as you compete with fellow Surfers for the top spot! A new Layer of
+                  rewards and utility is coming!
+
                   <LinkButton
                     size="medium"
                     type="external"
@@ -909,7 +912,8 @@ const Airdrop = () => {
                     }}
                     handleClick={() => {
                       window.open(
-                        "https://blog.fluidity.money/introducing-the-final-fluidity-airdrop-season-v2-now-live-acf6a7838ce2",
+                        // TODO
+                        "https://blog.fluidity.money",
                         "_blank"
                       );
                     }}
@@ -952,14 +956,7 @@ const Airdrop = () => {
               />
               <MultiplierTasks />
               <MyMultiplier
-                seeMyStakingStats={() => {
-                  setCurrentModal("stake");
-                  // would just useRef here but the ref doesn't exist at this point
-                  // timeout is needed to counterract the scroll to top
-                  setTimeout(() => {
-                    window.scrollTo(0, 1000);
-                  }, 500);
-                }}
+                seeMyStakingStats={() => toggleStakingVisibility?.(true)}
                 seeStakeNow={() => setCurrentModal("stake")}
                 liquidityMultiplier={liquidityMultiplier}
                 stakes={stakes}
@@ -1188,7 +1185,7 @@ const Airdrop = () => {
       ) : (
         <>
           <div className="pad-main">
-            <div style={{ paddingTop: "10px", paddingBottom: "20px" }}>
+            <div className="airdrop-image-banner">
               <img
                 style={{
                   maxWidth: "1110px",
@@ -1198,7 +1195,7 @@ const Airdrop = () => {
                   borderColor: "white",
                 }}
                 width="100%"
-                src="https://app-cdn.fluidity.money/images/epoch2AirdropBanner.png"
+                src="https://app-cdn.fluidity.money/images/epoch3AirdropBanner.png"
               />
             </div>
             <div
@@ -1218,19 +1215,20 @@ const Airdrop = () => {
                 }}
               >
                 <div>
-                  <Heading
-                    as="h2"
-                    className={"no-margin"}
-                    style={{ marginBottom: "0.5em" }}
-                  >
-                    Airdrop V2: Arbitrum&apos;s Space Expedition.
-                  </Heading>
+                  <div>
+                    <Heading
+                      as="h2"
+                      className={"no-margin"}
+                      style={{ marginBottom: "0.5em" }}
+                    >
+                      Airdrop V3: FLY Me To The Moon.
+                    </Heading>
+                  </div>
                   <Text style={{ fontSize: 14 }}>
-                    Fluidify your assets, transact them, and boost your rewards
-                    by using your Fluid Assets on partnered protocols and
-                    staking liquidity right here on Fluidity! Keep an eye on the
-                    leaderboard as you compete with fellow Fluiders for the top
-                    spot. Future Fluid Governance Tokens await!
+                    Stake and trade your $FLY, fluidify your assets, transact them, and boost your rewards by
+                    using trading on partnered protocols and staking liquidity right here on Fluidity! Keep an
+                    eye on the leaderboard as you compete with fellow Surfers for the top spot! A new Layer of
+                    rewards and utility is coming!
                     <LinkButton
                       size="medium"
                       type="external"
@@ -1241,7 +1239,8 @@ const Airdrop = () => {
                       }}
                       handleClick={() => {
                         window.open(
-                          "https://blog.fluidity.money/introducing-the-final-fluidity-airdrop-season-v2-now-live-acf6a7838ce2",
+                          // TODO
+                          "https://blog.fluidity.money/",
                           "_blank"
                         );
                       }}
@@ -1263,7 +1262,7 @@ const Airdrop = () => {
                 />
                 <MultiplierTasks />
                 <MyMultiplier
-                  seeMyStakingStats={() => setCurrentModal("staking-stats")}
+                  seeMyStakingStats={() => toggleStakingVisibility?.(true)}
                   seeStakeNow={() => setCurrentModal("stake")}
                   liquidityMultiplier={liquidityMultiplier}
                   stakes={stakes}
@@ -1352,8 +1351,8 @@ const AirdropStats = ({
   navigate,
   isMobile,
 }: IAirdropStats) => {
-  const epochDaysLeft = 0;
-  const epochPercentage = 100;
+  const epochDaysLeft = 90;
+  const epochPercentage = 0;
 
   return (
     <div
@@ -1449,16 +1448,7 @@ const MultiplierTasks = () => {
   const [tasks, setTasks] = useState<"1x" | "12x">("12x");
 
   const providerLinks: { provider: Provider; link: string }[] = [
-    { provider: "Jumper", link: "https://jumper.exchange/" },
-    {
-      provider: "Trader Joe",
-      link: "https://traderjoexyz.com/arbitrum/trade?outputCurrency=0x4cfa50b7ce747e2d61724fcac57f24b748ff2b2a",
-    },
-    { provider: "Camelot", link: "https://app.camelot.exchange/" },
-    {
-      provider: "Ramses",
-      link: "https://app.ramses.exchange/liquidity/v2/0xf73c87736008ad3af9973b357c97ab8c60d8ca63",
-    },
+    { provider: "Uniswap", link: "https://app.uniswap.org/swap?outputCurrency=0x000F1720A263f96532D1ac2bb9CDC12b72C6f386&chain=arbitrum" },
   ];
 
   return (
@@ -1468,7 +1458,7 @@ const MultiplierTasks = () => {
           Multiplier Tasks
         </Text>
         <Text size="xs" style={{ color: "black" }}>
-          Transact fUSDC on listed platforms to earn more!
+          Transact FLY on listed platforms to earn more!
         </Text>
       </div>
       <div
@@ -1580,15 +1570,17 @@ const MyMultiplier = ({
         handleClick={seeMyStakingStats}
         id="mx-see-my-staking-stats"
       >
-        MY EPOCH 1 STAKING STATS
+        STAKE $FLY AND EARN
       </GeneralButton>
       <div>
         <div className="airdrop-arb-multipliers-container">
+          <Heading as="h5">
+            Provide $FLY and $ƒUSDC Liquidity to earn $ARB and Rewards!
+          </Heading>
           <Text holo={true}>
-            Provide $fUSDC Liquidity to earn $ARB and Multipliers! Add liquidity
-            to the following Trader Joe and Camelot pools to earn $ARB liquidity
-            mining rewards! You will also retroactively earn bottles depending
-            on your contribution at the end of the Airdrop!
+            Add liquidity to Uniswap or the following Trader Joe and Camelot pools to earn Liquidity
+            Mining rewards! You will also retroactively earn bottles depending on your contribution at
+            the end of the Airdrop!
           </Text>
         </div>
         <JoeFarmlandsOrCamelotKingdom />
@@ -1602,10 +1594,10 @@ const airdropRankRow = (
   isMobile = false
 ): IRow => {
   const { address } = useContext(FluidityFacadeContext);
-  const { user, rank, referralCount, fusdcEarned, arbEarned, bottles } = data;
+  const { user, rank, referralCount, fusdcEarned, arbEarned, flyStaked, bottles } = data;
 
   return {
-    className: `airdrop-row ${isMobile ? "airdrop-mobile" : ""} ${address === user ? "highlighted-row" : ""
+    className: `airdrop-row ${isMobile ? "airdrop-mobile" : ""} ${address && address === user ? "highlighted-row" : ""
       }`,
     RowElement: ({ heading }: { heading: string }) => {
       switch (heading) {
@@ -1615,7 +1607,7 @@ const airdropRankRow = (
               <Text
                 prominent
                 style={
-                  address === user
+                  address && address === user
                     ? {
                       color: "black",
                     }
@@ -1638,14 +1630,14 @@ const airdropRankRow = (
                 <Text
                   prominent
                   style={
-                    address === user
+                    address && address === user
                       ? {
                         color: "black",
                       }
                       : {}
                   }
                 >
-                  {address === user ? "ME" : trimAddress(user)}
+                  {address && address === user ? "ME" : trimAddress(user)}
                 </Text>
               </a>
             </td>
@@ -1656,7 +1648,7 @@ const airdropRankRow = (
               <Text
                 prominent
                 style={
-                  address === user
+                  address && address === user
                     ? {
                       color: "black",
                     }
@@ -1673,7 +1665,7 @@ const airdropRankRow = (
               <Text
                 prominent
                 style={
-                  address === user
+                  address && address === user
                     ? {
                       color: "black",
                     }
@@ -1690,7 +1682,7 @@ const airdropRankRow = (
               <Text
                 prominent
                 style={
-                  address === user
+                  address && address === user
                     ? {
                       color: "black",
                     }
@@ -1701,13 +1693,30 @@ const airdropRankRow = (
               </Text>
             </td>
           );
+        case "$FLY STAKED":
+          return (
+            <td>
+              <Text
+                prominent
+                style={
+                  address && address === user
+                    ? {
+                      color: "black",
+                    }
+                    : {}
+                }
+              >
+                {toDecimalPlaces(flyStaked, 4)}
+              </Text>
+            </td>
+          );
         case "REFERRALS":
           return (
             <td>
               <Text
                 prominent
                 style={
-                  address === user
+                  address && address === user
                     ? {
                       color: "black",
                     }
@@ -1757,6 +1766,7 @@ const Leaderboard = ({
       highestRewardTier: 0,
       fusdcEarned: 0,
       arbEarned: 0,
+      flyStaked: 0,
     };
 
     data.push(userEntry);
@@ -1799,6 +1809,7 @@ const Leaderboard = ({
           { name: "BOTTLES" },
           { name: "$fUSDC EARNED" },
           { name: "$ARB EARNED" },
+          { name: "$FLY STAKED" },
           { name: "REFERRALS" },
         ]}
         pagination={{

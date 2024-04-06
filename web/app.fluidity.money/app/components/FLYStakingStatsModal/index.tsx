@@ -110,7 +110,6 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
         const { flyStaked, points } = details;
         setPoints(points);
         setFlyStaked(flyStaked);
-        console.log("fly staked 123", flyStaked);
       } catch (err) {
         console.error("error staking details", err);
         setErrorMessage(`Failed to get staking details! ${err}`);
