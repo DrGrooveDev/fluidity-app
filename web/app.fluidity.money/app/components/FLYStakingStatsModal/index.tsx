@@ -61,6 +61,8 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
     flyStakingDetails,
     flyStakingBeginUnstake,
     flyStakingAmountUnstaking,
+    flyStakingFinaliseUnstake,
+    flyStakingSecondsUntilSoonestUnstake,
   } = useContext(FluidityFacadeContext)
 
   const [flyBalance, setFlyBalance] = useState(new BN(0));
@@ -135,6 +137,23 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
       }
     })();
   }, [address, flyStakingAmountUnstaking]);
+
+  const [flyUnstakable, setFlyUnstakable] = useState(new BN(0));
+  const [flyUnstaked, setFlyUnstaked] = useState(false)
+
+  const finaliseUnstake = async() => {
+    const unstaked = await flyStakingFinaliseUnstake?.()
+    setFlyUnstaked(unstaked?.gt(new BN(0)) || false)
+  }
+
+  useEffect(() => {
+    (async() => {
+      if (!address) return;
+      const seconds = await flyStakingSecondsUntilSoonestUnstake?.(address)
+      if (!seconds || seconds.eq(new BN(0)))
+        setFlyUnstakable(flyUnstaking)
+     })()
+  }, [flyUnstaking, flyStakingSecondsUntilSoonestUnstake])
 
   const [isStaking, setIsStaking] = useState(staking)
   const [currentAction, setCurrentAction] = useState("Connect")
