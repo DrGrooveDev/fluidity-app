@@ -1278,6 +1278,21 @@
   align-self: normal !important;
 }
 
+.fly-unstaking-claim-action-button {
+  width: 30% !important;
+  align-self: center;
+}
+
+.fly-staking-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1em;
+}
+
+.fly-staking-grid-item-long {
+  grid-column: 1/-1;
+}
+
 .underline {
   text-decoration: underline;
 }
@@ -1357,6 +1372,12 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.fly-staking-claimable {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .text-with-info-popup {
