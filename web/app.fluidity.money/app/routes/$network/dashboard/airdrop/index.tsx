@@ -505,16 +505,27 @@ const Airdrop = () => {
   const isMobile = width < mobileBreakpoint;
 
   const { data: airdropData } = useCache<AirdropLoaderData>(
-      `/${network}/query/dashboard/airdrop?epoch=${EPOCH_CURRENT_IDENTIFIER}&address=${address}`
+    address
+      ? `/${network}/query/dashboard/airdrop?address=${address}&epoch=${EPOCH_CURRENT_IDENTIFIER}`
+      : ""
   );
 
   const currentApplication = "";
 
-  const { data: airdropLeaderboardData } = useCache<AirdropLoaderData>(
+  const { data: airdropLeaderboardData_ } = useCache<AirdropLeaderboardLoaderData>(
     `/${network}/query/dashboard/airdropLeaderboard?period=${leaderboardFilterIndex === 0 ? "24" : "all"
-    }${leaderboardFilterIndex === 0 ? `&provider=${currentApplication}` : ""
+    }&address=${address ?? ""}${leaderboardFilterIndex === 0 ? `&provider=${currentApplication}` : ""
     }&epoch=${EPOCH_CURRENT_IDENTIFIER}`
   );
+
+  // airdrop leaderboard data contains more than the displayed entries, so postprocessing is required
+  const airdropLeaderboardData = useMemo(() => ({
+    loaded: airdropLeaderboardData_?.loaded,
+    leaderboard: getLeaderboardWithUser(
+      airdropLeaderboardData_?.leaderboard || [], 
+      address ?? ""
+    )
+  }), [airdropLeaderboardData_])
 
   const { data: referralData } = useCache<AirdropLoaderData>(
     address
@@ -993,7 +1004,7 @@ const Airdrop = () => {
           {currentModal === "leaderboard" && (
             <>
               <Leaderboard
-                loaded={leaderboardLoaded}
+                loaded={leaderboardLoaded ?? false}
                 data={leaderboardRows}
                 filterIndex={leaderboardFilterIndex}
                 setFilterIndex={setLeaderboardFilterIndex}
@@ -1308,7 +1319,7 @@ const Airdrop = () => {
               color="white"
             >
               <Leaderboard
-                loaded={leaderboardLoaded}
+                loaded={leaderboardLoaded ?? false}
                 data={leaderboardRows}
                 filterIndex={leaderboardFilterIndex}
                 setFilterIndex={setLeaderboardFilterIndex}
@@ -1932,5 +1943,38 @@ export const dayDifference = (date1: Date, date2: Date) =>
 
 const isAirdropModal = (modal: string): modal is AirdropModalName =>
   AIRDROP_MODALS.includes(modal as AirdropModalName);
+
+// filter airdrop leaderboard data to the top 16 and the current user if the're found
+const getLeaderboardWithUser = (data: Array<AirdropLeaderboardEntry>, address: string) => {
+  const top16 = data.slice(0, 16)
+
+  // user not logged in
+  if (!address)
+    return top16
+
+  const userDataIndex = data.findIndex(({user}) => user === address)
+
+  // user not found in data, use a blank entry
+  if (userDataIndex === -1)
+    return [
+        {
+          user: address,
+          rank: -1,
+          liquidityMultiplier: 0,
+          referralCount: 0,
+          bottles: 0,
+          highestRewardTier: 0,
+          fusdcEarned: 0,
+          arbEarned: 0,
+          flyStaked: 0
+        } satisfies AirdropLeaderboardEntry,
+      ].concat(top16)
+  // found outside the top 16
+  if (userDataIndex >= 16) {
+    return [data[userDataIndex]].concat(top16)
+  }
+  // found in the top 16
+  return top16
+}
 
 export default Airdrop;
