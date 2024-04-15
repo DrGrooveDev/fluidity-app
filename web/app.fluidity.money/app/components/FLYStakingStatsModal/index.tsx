@@ -61,6 +61,8 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
     flyStakingDetails,
     flyStakingBeginUnstake,
     flyStakingAmountUnstaking,
+    flyStakingFinaliseUnstake,
+    flyStakingSecondsUntilSoonestUnstake,
   } = useContext(FluidityFacadeContext)
 
   const [flyBalance, setFlyBalance] = useState(new BN(0));
@@ -135,6 +137,23 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
       }
     })();
   }, [address, flyStakingAmountUnstaking]);
+
+  const [flyUnstakable, setFlyUnstakable] = useState(new BN(0));
+  const [flyUnstaked, setFlyUnstaked] = useState(false)
+
+  const finaliseUnstake = async() => {
+    const unstaked = await flyStakingFinaliseUnstake?.()
+    setFlyUnstaked(unstaked?.gt(new BN(0)) || false)
+  }
+
+  useEffect(() => {
+    (async() => {
+      if (!address) return;
+      const seconds = await flyStakingSecondsUntilSoonestUnstake?.(address)
+      if (!seconds || seconds.eq(new BN(0)))
+        setFlyUnstakable(flyUnstaking)
+     })()
+  }, [flyUnstaking, flyStakingSecondsUntilSoonestUnstake])
 
   const [isStaking, setIsStaking] = useState(staking)
   const [currentAction, setCurrentAction] = useState("Connect")
@@ -340,75 +359,99 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                             </Text>
                           </Card>
                         </div>
-                        <div style={{ gap: '0.5em' }} className="fly-staking-stats-modal-row">
-                          <Card fill>
-                            <Hoverable
-                              tooltipStyle={"solid"}
-                              tooltipContent={
+                        <div style={{ gap: '0.5em', flexDirection: "column" }} className="fly-staking-stats-modal-row">
+                        <div className="fly-staking-grid-container">
+                            <Card fill>
+                              <Hoverable
+                                tooltipStyle={"solid"}
+                                tooltipContent={
+                                  <div className="flex-column">
+                                    <Text className="staking-stats-info-text">
+                                      The amount of $FLY Token you have claimed.
+                                    </Text>
+                                  </div>
+                                }
+                              >
                                 <div className="flex-column">
-                                  <Text className="staking-stats-info-text">
-                                    The amount of $FLY Token you have claimed.
-                                  </Text>
+                                  <div className="text-with-info-popup">
+                                    <FlyIcon />
+                                    <Text size="lg" prominent>{getValueFromFlyAmount(flyBalance)?.toString()}</Text>
+                                  </div>
+                                  <div className="text-with-info-popup">
+                                    <Text size="lg">$FLY Balance</Text>
+                                    <InfoCircle className="info-circle-grey" />
+                                  </div>
                                 </div>
-                              }
-                            >
-                              <div className="flex-column">
-                                <div className="text-with-info-popup">
-                                  <FlyIcon />
-                                  <Text size="lg" prominent>{getValueFromFlyAmount(flyBalance)?.toString()}</Text>
-                                </div>
-                                <div className="text-with-info-popup">
-                                  <Text size="lg">$FLY Balance</Text>
-                                  <InfoCircle className="info-circle-grey" />
-                                </div>
-                              </div>
-                            </Hoverable>
-                          </Card>
-                          <Card fill>
-                            <Hoverable
-                              tooltipStyle={"solid"}
-                              tooltipContent={
+                              </Hoverable>
+                            </Card>
+                            <Card fill>
+                              <Hoverable
+                                tooltipStyle={"solid"}
+                                tooltipContent={
+                                  <div className="flex-column">
+                                    <Text className="staking-stats-info-text">
+                                      The amount of $FLY Token you have staked from your total $FLY Balance.
+                                    </Text>
+                                  </div>
+                                }
+                              >
                                 <div className="flex-column">
-                                  <Text className="staking-stats-info-text">
-                                    The amount of $FLY Token you have staked from your total $FLY Balance.
-                                  </Text>
+                                  <Text size="lg" prominent>{
+                                    (() => {
+                                      const s = getValueFromFlyAmount(new BN(flyStaked.toString()))?.toString();
+                                      if (!s) return flyStaked.toString();
+                                      return s;
+                                    })() }</Text>
+                                  <div className="text-with-info-popup">
+                                    <Text size="lg">Staked</Text>
+                                    <InfoCircle className="info-circle-grey" />
+                                  </div>
                                 </div>
-                              }
-                            >
-                              <div className="flex-column">
-                                <Text size="lg" prominent>{
-                                  (() => {
-                                    const s = getValueFromFlyAmount(new BN(flyStaked.toString()))?.toString();
-                                    if (!s) return flyStaked.toString();
-                                    return s;
-                                  })() }</Text>
-                                <div className="text-with-info-popup">
-                                  <Text size="lg">Staked</Text>
-                                  <InfoCircle className="info-circle-grey" />
-                                </div>
-                              </div>
-                            </Hoverable>
-                          </Card>
-                          <Card fill>
-                            <Hoverable
-                              tooltipStyle={"solid"}
-                              tooltipContent={
+                              </Hoverable>
+                            </Card>
+                            <Card fill>
+                              <Hoverable
+                                tooltipStyle={"solid"}
+                                tooltipContent={
+                                  <div className="flex-column">
+                                    <Text className="staking-stats-info-text">
+                                      The amount of $FLY Tokens you have unstaked from your total Staked $FLY Balance. Includes unbonding amount.
+                                    </Text>
+                                  </div>
+                                }
+                              >
                                 <div className="flex-column">
-                                  <Text className="staking-stats-info-text">
-                                    The amount of $FLY Tokens you have unstaked from your total Staked $FLY Balance. Includes unbonding amount.
+                                  <Text size="lg" prominent>{getValueFromFlyAmount(flyUnstaking)?.toString()}</Text>
+                                  <div className="text-with-info-popup">
+                                    <Text size="lg">Unstaking</Text>
+                                    <InfoCircle className="info-circle-grey" />
+                                  </div>
+                                </div>
+                              </Hoverable>
+                            </Card>
+                            <Card className="fly-staking-grid-item-long" fill>
+                              <div className="flex" style={{justifyContent: 'space-between'}}>
+                                <div className="fly-staking-claimable">
+                                  <Text size="xxl" prominent>{getValueFromFlyAmount(flyUnstakable)?.toString()}</Text>
+                                  <div className="text-with-info-popup">
+                                    <Text size="lg">Claimable Unstaked $FLY</Text>
+                                  </div>
+                                </div>
+                                <GeneralButton
+                                  type="primary"
+                                  size="large"
+                                  layout="after"
+                                  disabled={flyUnstaked || flyUnstaking.eq(new BN(0))}
+                                  handleClick={finaliseUnstake}
+                                  className={`fly-unstaking-claim-action-button ${flyUnstaked ? "claim-button-staked" : ""}`}
+                                >
+                                  <Text size="md" bold className="fly-submit-claim-action-button-text">
+                                    {flyUnstaked ? "Claimed" : "Claim"}
                                   </Text>
-                                </div>
-                              }
-                            >
-                              <div className="flex-column">
-                                <Text size="lg" prominent>{getValueFromFlyAmount(flyUnstaking)?.toString()}</Text>
-                                <div className="text-with-info-popup">
-                                  <Text size="lg">Unstaking</Text>
-                                  <InfoCircle className="info-circle-grey" />
-                                </div>
+                                </GeneralButton>
                               </div>
-                            </Hoverable>
-                          </Card>
+                            </Card>
+                          </div>
                         </div>
                       </>
                       :
