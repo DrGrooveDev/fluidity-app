@@ -1293,6 +1293,26 @@
   grid-column: 1/-1;
 }
 
+.fly-staking-popup-icon-text {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fly-staking-popup-container-outer {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
+.fly-staking-popup-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.centre {
+  align-self: center;
+}
+
 .underline {
   text-decoration: underline;
 }
@@ -1494,6 +1514,9 @@ claim-error-message-none {
 .staking-stats-info-text {
   min-width: 100px;
   max-width: 140px;
+}
+.staking-stats-info-text .nowrap {
+  white-space: nowrap;
 }
 
 .airdrop-image-banner {
