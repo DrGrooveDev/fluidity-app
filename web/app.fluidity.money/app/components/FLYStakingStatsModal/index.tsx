@@ -361,6 +361,72 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                         </div>
                         <div style={{ gap: '0.5em', flexDirection: "column" }} className="fly-staking-stats-modal-row">
                         <div className="fly-staking-grid-container">
+                            <Card className="fly-staking-grid-item-long" fill>
+                              <div className="centre">
+                                <Hoverable
+                                  tooltipStyle={"solid"}
+                                  tooltipContent={
+                                    <div className="fly-staking-popup-container-outer">
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text">
+                                          😔 No Tier
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"5000 > No Tier"}
+                                        </Text>
+                                      </div>
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text">
+                                          🦐 Shrimp
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"30,000 > Shrimp"}
+                                        </Text>
+                                      </div>
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text">
+                                          🐬 Dolphin
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"80,000 > Dolphin"}
+                                        </Text>
+                                      </div>
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text">
+                                          🏄‍♂️ Surfer
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"250,000 > Surfer"}
+                                        </Text>
+                                      </div>
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text">
+                                          🗿 Tiki Warrior
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"1,000,000 > Tiki"}
+                                        </Text>
+                                      </div>
+                                      <div className="fly-staking-popup-container">
+                                        <Text className="staking-stats-info-text nowrap">
+                                          🌌 Super Surfer
+                                        </Text>
+                                        <Text className="fly-staking-popup-icon-text">
+                                          {"∞ > Super Surfer"}
+                                        </Text>
+                                      </div>
+                                    </div>
+                                  }
+                                >
+                                  <div className="flex-column">
+                                    <div className="text-with-info-popup">
+                                      <Text size="lg">{tierText(flyStaked)}</Text>
+                                      <InfoCircle className="info-circle-grey" />
+                                    </div>
+                                  </div>
+                                </Hoverable>
+                              </div>
+                            </Card>
                             <Card fill>
                               <Hoverable
                                 tooltipStyle={"solid"}
@@ -421,7 +487,12 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                 }
                               >
                                 <div className="flex-column">
-                                  <Text size="lg" prominent>{getValueFromFlyAmount(flyUnstaking)?.toString()}</Text>
+                                  <Text size="lg" prominent>{
+                                    (() => {
+                                      const s = getValueFromFlyAmount(new BN(flyStaked.toString()))?.toString();
+                                      if (!s) return flyStaked.toString();
+                                      return s;
+                                    })() }</Text>
                                   <div className="text-with-info-popup">
                                     <Text size="lg">Unstaking</Text>
                                     <InfoCircle className="info-circle-grey" />
@@ -650,6 +721,23 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
   ])
 
   return modal;
+}
+
+const tierText = (flyStaked: BigNumber): JSX.Element => {
+  switch (true) {
+    case (flyStaked.lt(BigNumber.from(5000))):
+    return <>😔 No Tier</>;
+    case (flyStaked.lt(BigNumber.from(30000))):
+    return <>🦐 Shrimp Tier</>;
+    case (flyStaked.lt(BigNumber.from(80000))):
+    return <>🐬 Dolphin Tier</>;
+    case (flyStaked.lt(BigNumber.from(250000))):
+    return <>🏄‍♂️ Surfer Tier</>;
+    case (flyStaked.lt(BigNumber.from(1000000))):
+    return <>🗿 Tiki Warrior Tier</>;
+    default:
+    return <>🌌 Super Surfer Tier</>;
+  } 
 }
 
 const StakingWarning = ({ header, body }: { header: ReactNode, body: ReactNode }) => {

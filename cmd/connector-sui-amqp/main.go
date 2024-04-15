@@ -12,17 +12,17 @@ import (
 
 	"github.com/fluidity-money/sui-go-sdk/models"
 
-	"github.com/fluidity-money/sui-go-sdk/sui"
 	"github.com/fluidity-money/fluidity-app/lib/log"
 	"github.com/fluidity-money/fluidity-app/lib/queue"
 	sui_queue "github.com/fluidity-money/fluidity-app/lib/queues/sui"
 	"github.com/fluidity-money/fluidity-app/lib/types/misc"
 	sui_types "github.com/fluidity-money/fluidity-app/lib/types/sui"
 	"github.com/fluidity-money/fluidity-app/lib/util"
+	"github.com/fluidity-money/sui-go-sdk/sui"
 )
 
 const (
-	RedisLastCheckpoint  = `sui.last-checkpoint`
+	RedisLastCheckpoint = `sui.last-checkpoint`
 
 	// RedisBufferSize is the length of the buffer for previously seen blocks
 	RedisBufferSize = 100

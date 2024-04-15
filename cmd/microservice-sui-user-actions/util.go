@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"math/big"
 
+	"github.com/fluidity-money/fluidity-app/lib/log"
 	"github.com/fluidity-money/sui-go-sdk/models"
 	"github.com/fluidity-money/sui-go-sdk/sui"
-	"github.com/fluidity-money/fluidity-app/lib/log"
 )
 
 const (
