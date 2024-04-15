@@ -1004,7 +1004,7 @@ const Airdrop = () => {
           {currentModal === "leaderboard" && (
             <>
               <Leaderboard
-                loaded={leaderboardLoaded}
+                loaded={leaderboardLoaded ?? false}
                 data={leaderboardRows}
                 filterIndex={leaderboardFilterIndex}
                 setFilterIndex={setLeaderboardFilterIndex}
@@ -1319,7 +1319,7 @@ const Airdrop = () => {
               color="white"
             >
               <Leaderboard
-                loaded={leaderboardLoaded}
+                loaded={leaderboardLoaded ?? false}
                 data={leaderboardRows}
                 filterIndex={leaderboardFilterIndex}
                 setFilterIndex={setLeaderboardFilterIndex}
