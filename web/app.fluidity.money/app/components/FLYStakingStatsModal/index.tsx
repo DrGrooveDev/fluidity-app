@@ -494,26 +494,6 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                       return s;
                                     })() }</Text>
                                   <div className="text-with-info-popup">
-                                    <Text size="lg">Staked</Text>
-                                    <InfoCircle className="info-circle-grey" />
-                                  </div>
-                                </div>
-                              </Hoverable>
-                            </Card>
-                            <Card fill>
-                              <Hoverable
-                                tooltipStyle={"solid"}
-                                tooltipContent={
-                                  <div className="flex-column">
-                                    <Text className="staking-stats-info-text">
-                                      The amount of $FLY Tokens you have unstaked from your total Staked $FLY Balance. Includes unbonding amount.
-                                    </Text>
-                                  </div>
-                                }
-                              >
-                                <div className="flex-column">
-                                  <Text size="lg" prominent>{getValueFromFlyAmount(flyUnstaking)?.toString()}</Text>
-                                  <div className="text-with-info-popup">
                                     <Text size="lg">Unstaking</Text>
                                     <InfoCircle className="info-circle-grey" />
                                   </div>
