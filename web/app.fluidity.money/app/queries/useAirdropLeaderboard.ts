@@ -67,21 +67,8 @@ type AirdropLeaderboardBody = {
   query: string;
 };
 
-type AirdropLeaderboardByUserBody = AirdropLeaderboardBody & {
-  variables: {
-    address: string;
-  };
-};
-
 type AirdropLeaderboardByApplicationBody = AirdropLeaderboardBody & {
   variables: {
-    application: string;
-  };
-};
-
-type AirdropLeaderboardByUserByApplicationBody = AirdropLeaderboardBody & {
-  variables: {
-    address: string;
     application: string;
   };
 };
