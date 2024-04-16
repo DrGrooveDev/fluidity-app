@@ -372,7 +372,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           😔 No Tier
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"5000 > No Tier"}
+                                          {"0 ≤ No Tier < 5000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -380,7 +380,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🦐 Shrimp
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"30,000 > Shrimp"}
+                                          {"5,000 ≤ Shrimp 30,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -388,7 +388,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🐬 Dolphin
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"80,000 > Dolphin"}
+                                          {"30,000 ≤ Dolphin < 80,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -396,7 +396,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🏄‍♂️ Surfer
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"250,000 > Surfer"}
+                                          {"80,000 ≤ Surfer < 250,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -404,7 +404,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🗿 Tiki Warrior
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"1,000,000 > Tiki"}
+                                          {"250,000 ≤ Tiki < 1,000,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -412,7 +412,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🌌 Super Surfer
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"∞ > Super Surfer"}
+                                          {"1,000,000 ≤ Super Surfer"}
                                         </Text>
                                       </div>
                                     </div>
