@@ -40,7 +40,6 @@ import {
   StakingStatsModal,
   TutorialModal,
   RecapModal,
-  TestnetRewardsModal,
 } from "./common";
 import { motion } from "framer-motion";
 import {
@@ -1074,11 +1073,6 @@ const Airdrop = () => {
               <HowItWorksContent isMobile />
             </>
           )}
-          {currentModal === "testnet-rewards" && (
-            <>
-              <TestnetRewardsModal />
-            </>
-          )}
         </motion.div>
       </>
     );
@@ -1159,13 +1153,6 @@ const Airdrop = () => {
         closeModal={closeModal}
       >
         <TutorialModal closeModal={closeModal} />
-      </CardModal>
-      <CardModal
-        id="testnet-rewards"
-        visible={currentModal === "testnet-rewards"}
-        closeModal={closeModal}
-      >
-        <TestnetRewardsModal />
       </CardModal>
 
       {/* Page Content */}
