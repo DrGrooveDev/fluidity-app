@@ -420,7 +420,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                 >
                                   <div className="flex-column">
                                     <div className="text-with-info-popup">
-                                      <Text size="lg">{tierText(flyStaked)}</Text>
+                                      <Text size="lg">{tierText(flyStaked.toString())}</Text>
                                       <InfoCircle className="info-circle-grey" />
                                     </div>
                                   </div>
@@ -723,17 +723,18 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
   return modal;
 }
 
-const tierText = (flyStaked: BigNumber): JSX.Element => {
+const tierText = (flyStakedUnscaled: string): JSX.Element => {
+  const flyStaked = Number(getValueFromFlyAmount(new BN(flyStakedUnscaled)))
   switch (true) {
-    case (flyStaked.lt(BigNumber.from(5000))):
+    case flyStaked < 5000:
     return <>😔 No Tier</>;
-    case (flyStaked.lt(BigNumber.from(30000))):
+    case flyStaked < 30000:
     return <>🦐 Shrimp Tier</>;
-    case (flyStaked.lt(BigNumber.from(80000))):
+    case flyStaked < 80000:
     return <>🐬 Dolphin Tier</>;
-    case (flyStaked.lt(BigNumber.from(250000))):
+    case flyStaked < 250000:
     return <>🏄‍♂️ Surfer Tier</>;
-    case (flyStaked.lt(BigNumber.from(1000000))):
+    case flyStaked < 1000000:
     return <>🗿 Tiki Warrior Tier</>;
     default:
     return <>🌌 Super Surfer Tier</>;
