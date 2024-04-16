@@ -372,7 +372,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           😔 No Tier
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"5000 > No Tier"}
+                                          {"0 ≤ No Tier < 5000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -380,7 +380,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🦐 Shrimp
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"30,000 > Shrimp"}
+                                          {"5,000 ≤ Shrimp 30,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -388,7 +388,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🐬 Dolphin
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"80,000 > Dolphin"}
+                                          {"30,000 ≤ Dolphin < 80,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -396,7 +396,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🏄‍♂️ Surfer
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"250,000 > Surfer"}
+                                          {"80,000 ≤ Surfer < 250,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -404,7 +404,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🗿 Tiki Warrior
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"1,000,000 > Tiki"}
+                                          {"250,000 ≤ Tiki < 1,000,000"}
                                         </Text>
                                       </div>
                                       <div className="fly-staking-popup-container">
@@ -412,7 +412,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                           🌌 Super Surfer
                                         </Text>
                                         <Text className="fly-staking-popup-icon-text">
-                                          {"∞ > Super Surfer"}
+                                          {"1,000,000 ≤ Super Surfer"}
                                         </Text>
                                       </div>
                                     </div>
@@ -420,7 +420,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                 >
                                   <div className="flex-column">
                                     <div className="text-with-info-popup">
-                                      <Text size="lg">{tierText(flyStaked)}</Text>
+                                      <Text size="lg">{tierText(flyStaked.toString())}</Text>
                                       <InfoCircle className="info-circle-grey" />
                                     </div>
                                   </div>
@@ -487,12 +487,9 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                 }
                               >
                                 <div className="flex-column">
-                                  <Text size="lg" prominent>{
-                                    (() => {
-                                      const s = getValueFromFlyAmount(new BN(flyStaked.toString()))?.toString();
-                                      if (!s) return flyStaked.toString();
-                                      return s;
-                                    })() }</Text>
+                                  <Text size="lg" prominent>
+                                    {getValueFromFlyAmount(flyUnstaking) ?? flyUnstaking.toString()}
+                                  </Text>
                                   <div className="text-with-info-popup">
                                     <Text size="lg">Unstaking</Text>
                                     <InfoCircle className="info-circle-grey" />
@@ -723,17 +720,18 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
   return modal;
 }
 
-const tierText = (flyStaked: BigNumber): JSX.Element => {
+const tierText = (flyStakedUnscaled: string): JSX.Element => {
+  const flyStaked = Number(getValueFromFlyAmount(new BN(flyStakedUnscaled)))
   switch (true) {
-    case (flyStaked.lt(BigNumber.from(5000))):
+    case flyStaked < 5000:
     return <>😔 No Tier</>;
-    case (flyStaked.lt(BigNumber.from(30000))):
+    case flyStaked < 30000:
     return <>🦐 Shrimp Tier</>;
-    case (flyStaked.lt(BigNumber.from(80000))):
+    case flyStaked < 80000:
     return <>🐬 Dolphin Tier</>;
-    case (flyStaked.lt(BigNumber.from(250000))):
+    case flyStaked < 250000:
     return <>🏄‍♂️ Surfer Tier</>;
-    case (flyStaked.lt(BigNumber.from(1000000))):
+    case flyStaked < 1000000:
     return <>🗿 Tiki Warrior Tier</>;
     default:
     return <>🌌 Super Surfer Tier</>;
