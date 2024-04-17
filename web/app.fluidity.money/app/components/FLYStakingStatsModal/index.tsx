@@ -44,7 +44,7 @@ const getValueFromFlyAmount = (amount: BN) => {
       const rightSide = x.slice(x.length - 6).slice(0, 3);
       return `${leftSide}.${rightSide}`;
     })();
-  case (x.length < 6):
+  case (x.length <= 6):
     return `0.${x}`;
   }
 };
