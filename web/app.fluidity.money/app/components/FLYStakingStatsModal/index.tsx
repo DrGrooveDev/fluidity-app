@@ -579,7 +579,9 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                                   `${getValueFromFlyAmount(flyBalance.sub(stakeAmount))} $FLY remaining` :
                                   `${getValueFromFlyAmount(new BN(flyStaked.toString()).sub(unstakeAmount))} $FLY staked remaining`}
                                 <div className="flex" style={{gap: '0.5em'}}>
-                                  <Text size="md">Staking {getValueFromFlyAmount(stakeAmount)} $FLY</Text>
+                                  {isStaking ? 
+                                  <Text size="md">Staking {getValueFromFlyAmount(stakeAmount)} $FLY</Text> :
+                                  <Text size="md">Unstaking {getValueFromFlyAmount(unstakeAmount)} $FLY</Text>}
                                   <div onClick={setMaxBalance}>
                                     <Text prominent size="md" className="max-balance-text">Max</Text>
                                   </div>
@@ -618,7 +620,7 @@ const FlyStakingStatsModal = ({ visible, close, showConnectWalletModal, shouldUp
                           <div className="fly-staking-stats-modal-row">
                             {currentStatus < State.HasStaked ? <BaseCircle /> : <Checked />}
                             <div className="flex-column">
-                              <Text size="lg" prominent>{isStaking ? "Stake" : "Unstake"} $FLY {getValueFromFlyAmount(stakeAmount)}</Text>
+                              <Text size="lg" prominent>{isStaking ? `Stake $FLY ${getValueFromFlyAmount(stakeAmount)}`: `Unstake $FLY ${getValueFromFlyAmount(unstakeAmount)}`}</Text>
                               {
                                 currentStatus >= State.HasStaked && (
                                   isStaking ?
