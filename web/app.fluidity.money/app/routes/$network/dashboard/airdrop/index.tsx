@@ -29,7 +29,6 @@ import {
   toSignificantDecimals,
   numberToCommaSeparated,
   useViewport,
-  numberToMonetaryString,
   toDecimalPlaces,
 } from "@fluidity-money/surfing";
 import {
@@ -521,16 +520,13 @@ const Airdrop = () => {
     );
 
   // airdrop leaderboard data contains more than the displayed entries, so postprocessing is required
-  const airdropLeaderboardData = useMemo(
-    () => ({
-      loaded: airdropLeaderboardData_?.loaded,
-      leaderboard: getLeaderboardWithUser(
-        airdropLeaderboardData_?.leaderboard || [],
-        address ?? ""
-      ),
-    }),
-    [airdropLeaderboardData_]
-  );
+  const airdropLeaderboardData = useMemo(() => ({
+    loaded: airdropLeaderboardData_?.loaded,
+    leaderboard: getLeaderboardWithUser(
+      airdropLeaderboardData_?.leaderboard || [],
+      address ?? ""
+    )
+  }), [airdropLeaderboardData_])
 
   const { data: referralData } = useCache<AirdropLoaderData>(
     address
@@ -1615,7 +1611,7 @@ const airdropRankRow = (
   isMobile = false
 ): IRow => {
   const { address } = useContext(FluidityFacadeContext);
-  const { user, rank, referralCount, fusdcEarned, flyStaked, bottles } = data;
+  const { user, rank, referralCount, flyStaked, bottles } = data;
 
   return {
     className: `airdrop-row ${isMobile ? "airdrop-mobile" : ""} ${
@@ -1678,40 +1674,6 @@ const airdropRankRow = (
                 }
               >
                 {toSignificantDecimals(bottles, 0)}
-              </Text>
-            </td>
-          );
-        case "$fUSDC EARNED":
-          return (
-            <td>
-              <Text
-                prominent
-                style={
-                  address && address === user
-                    ? {
-                        color: "black",
-                      }
-                    : {}
-                }
-              >
-                {numberToMonetaryString(fusdcEarned)}
-              </Text>
-            </td>
-          );
-        case "$ARB EARNED":
-          return (
-            <td>
-              <Text
-                prominent
-                style={
-                  address && address === user
-                    ? {
-                        color: "black",
-                      }
-                    : {}
-                }
-              >
-                0
               </Text>
             </td>
           );
@@ -1837,8 +1799,6 @@ const Leaderboard = ({
           { name: "RANK" },
           { name: "USER" },
           { name: "BOTTLES" },
-          { name: "$fUSDC EARNED" },
-          { name: "$ARB EARNED" },
           { name: "$FLY STAKED" },
           { name: "REFERRALS" },
         ]}
